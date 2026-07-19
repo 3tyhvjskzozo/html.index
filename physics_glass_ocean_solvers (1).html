@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>حل‌کننده فرمول‌های فیزیک دبیرستان | Glass Ocean</title>
+
+  <!-- Google Font: Vazirmatn -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- KaTeX CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.css" integrity="sha384-sN4V6i4V1xJ5V1k0K3T1r7Qa3JjHLz8W1mv0PzQqQjOQf8f4OVMAm7G6qzM4wA0" crossorigin="anonymous">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.10/dist/katex.min.js" integrity="sha384-hIoBPJpTUs74ddyc4bFZSM1MZu6ADomyXk8EogbLDBsPU5rkXF/dtZZxL1Pceg6x" crossorigin="anonymous"></script>
+
+  <style>
+    :root{
+      --deep:#061625;
+      --deep2:#08233b;
+      --ocean:#0b6fa4;
+      --cyan:#7be8ff;
+      --cyan2:#d9fbff;
+      --green:#75f3bb;
+      --green2:#dcffef;
+      --pink:#ff8bd6;
+      --pink2:#ffe1f4;
+      --white:#f8feff;
+      --ink:#ecfbff;
+      --muted:#b9dcec;
+      --glass:rgba(255,255,255,.14);
+      --glass2:rgba(255,255,255,.08);
+      --line:rgba(255,255,255,.22);
+      --shadow:0 24px 80px rgba(0,0,0,.28);
+      --radius:26px;
+      --danger:#ff6d8d;
+      --warning:#ffd166;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:"Vazirmatn", Tahoma, Arial, sans-serif;
+      color:var(--ink);
+      line-height:1.8;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,139,214,.46), transparent 25%),
+        radial-gradient(circle at 88% 16%, rgba(117,243,187,.34), transparent 26%),
+        radial-gradient(circle at 52% 100%, rgba(123,232,255,.36), transparent 34%),
+        linear-gradient(145deg,var(--deep),var(--deep2) 47%,#0c4773 100%);
+      overflow-x:hidden;
+    }
+    body:before, body:after{
+      content:"";
+      position:fixed;
+      z-index:-2;
+      pointer-events:none;
+      border-radius:44% 56% 60% 40%;
+      filter:blur(.2px);
+      opacity:.62;
+    }
+    body:before{
+      width:920px;height:920px;left:-260px;top:-280px;
+      background:conic-gradient(from 150deg, transparent, rgba(123,232,255,.25), rgba(255,139,214,.18), transparent);
+      animation:floatA 18s ease-in-out infinite alternate;
+    }
+    body:after{
+      width:780px;height:780px;right:-280px;bottom:-330px;
+      background:conic-gradient(from 20deg, rgba(117,243,187,.22), transparent, rgba(11,111,164,.26), transparent);
+      animation:floatB 22s ease-in-out infinite alternate;
+    }
+    @keyframes floatA{to{transform:translate(45px,35px) rotate(18deg)}}
+    @keyframes floatB{to{transform:translate(-55px,-35px) rotate(-16deg)}}
+    .waves{
+      position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.25;mix-blend-mode:screen;
+      background-image:
+        linear-gradient(112deg, transparent 0 45%, rgba(255,255,255,.12) 48%, transparent 52% 100%),
+        repeating-radial-gradient(ellipse at 50% 120%, transparent 0 28px, rgba(255,255,255,.08) 29px 30px);
+    }
+    main{max-width:1420px;margin:auto;padding:26px 18px 60px}
+    .glass{
+      border:1px solid var(--line);
+      background:linear-gradient(160deg, rgba(255,255,255,.17), rgba(255,255,255,.075));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+    }
+    header{
+      position:relative;overflow:hidden;border-radius:34px;padding:30px;
+    }
+    header:before{
+      content:"";position:absolute;inset:-2px;pointer-events:none;
+      background:
+        radial-gradient(circle at 4% 20%, rgba(255,139,214,.24), transparent 30%),
+        radial-gradient(circle at 92% 5%, rgba(117,243,187,.22), transparent 28%),
+        linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+    }
+    .hero{position:relative;z-index:1;display:grid;grid-template-columns:1.35fr .65fr;gap:22px;align-items:center}
+    h1{margin:0 0 10px;font-size:clamp(28px,5vw,58px);line-height:1.18;letter-spacing:-1.3px}
+    .gradient-text{background:linear-gradient(90deg,var(--white),var(--cyan),var(--pink2),var(--green2));-webkit-background-clip:text;background-clip:text;color:transparent}
+    .lead{margin:0;color:var(--muted);font-size:17px;max-width:860px}
+    .badges{display:flex;flex-wrap:wrap;gap:9px;margin-top:18px}
+    .badge{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.09);font-size:13px;color:#ecfdff}
+    .orb-card{min-height:225px;border:1px solid var(--line);border-radius:30px;background:rgba(6,22,37,.38);display:grid;place-items:center;position:relative;overflow:hidden}
+    .orb{width:145px;height:145px;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff,#bdffff 16%,#78f0df 34%,#229ee5 58%,#083d72 78%);box-shadow:0 0 60px rgba(123,232,255,.45), inset -18px -22px 40px rgba(0,0,0,.28);animation:pulse 4.6s ease-in-out infinite}
+    @keyframes pulse{50%{transform:translateY(-8px) scale(1.035)}}
+    .orb-card p{position:absolute;bottom:15px;margin:0;color:var(--muted);font-size:13px;text-align:center;padding:0 18px}
+    .tabs-wrap{position:sticky;top:0;z-index:50;margin:18px 0 0;padding:12px;border-radius:24px;background:rgba(5,18,32,.62);border:1px solid var(--line);backdrop-filter:blur(18px);box-shadow:0 14px 45px rgba(0,0,0,.18)}
+    .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .tab-btn{font:inherit;border:1px solid var(--line);border-radius:17px;padding:12px 14px;cursor:pointer;color:var(--ink);background:rgba(255,255,255,.09);font-weight:800;transition:.18s transform,.18s background,.18s box-shadow}
+    .tab-btn:hover{transform:translateY(-2px);background:rgba(255,255,255,.14)}
+    .tab-btn.active{color:#072033;background:linear-gradient(135deg,var(--cyan),var(--green));box-shadow:0 12px 28px rgba(0,0,0,.22)}
+    .tab-panel{display:none;margin-top:18px}.tab-panel.active{display:block;animation:fadeIn .25s ease both}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .grade-head{border-radius:var(--radius);padding:18px 20px;margin-bottom:16px}.grade-head h2{margin:0;font-size:26px}.grade-head p{margin:6px 0 0;color:var(--muted)}
+    .chapter{margin:18px 0 28px}.chapter-title{display:flex;align-items:center;gap:12px;margin:0 0 14px}.chapter-title .dot{width:13px;height:13px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--cyan));box-shadow:0 0 20px rgba(255,139,214,.5)}.chapter-title h3{margin:0;font-size:22px;color:#fff}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+    .solver-card{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:25px;padding:17px;background:rgba(5,18,32,.54);box-shadow:0 14px 38px rgba(0,0,0,.16);transition:.18s transform,.18s box-shadow,.18s border-color}
+    .solver-card:hover{transform:translateY(-4px);border-color:rgba(123,232,255,.56);box-shadow:0 22px 55px rgba(0,0,0,.24)}
+    .solver-card:before{content:"";position:absolute;inset:0 0 auto;height:5px;background:linear-gradient(90deg,var(--cyan),var(--pink),var(--green));opacity:.85}
+    .solver-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-top:4px}.solver-head h4{margin:0;font-size:19px;color:#fff}.unit-tag{font-size:12px;color:#dffaff;border:1px solid rgba(255,255,255,.17);border-radius:999px;padding:4px 8px;background:rgba(255,255,255,.06);white-space:nowrap}
+    .formula-box{direction:ltr;text-align:center;margin:14px 0;padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.18);background:linear-gradient(135deg,rgba(123,232,255,.09),rgba(255,139,214,.08))}.formula-box .katex{font-size:1.12em}.formula-fallback{font-family:serif;color:#fff;font-size:20px}
+    .inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.input-field{min-width:0}.input-field label{display:flex;justify-content:space-between;gap:6px;margin:0 0 6px;color:#dff8ff;font-size:13px}.input-field label small{color:var(--muted);direction:ltr;text-align:left}.input-field input{width:100%;border:1px solid var(--line);border-radius:15px;background:rgba(4,15,29,.62);color:var(--white);padding:11px 12px;font-family:inherit;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.08);direction:ltr;text-align:left}.input-field input::placeholder{color:rgba(234,248,255,.45)}.input-field input:focus{border-color:rgba(123,232,255,.7);box-shadow:0 0 0 3px rgba(123,232,255,.10)}
+    .calc-btn{width:100%;margin-top:12px;border:0;border-radius:16px;padding:12px 14px;font-family:inherit;font-weight:900;cursor:pointer;color:#061f33;background:linear-gradient(135deg,var(--cyan),var(--green));box-shadow:0 13px 28px rgba(0,0,0,.22);transition:.18s transform,.18s filter}.calc-btn:hover{transform:translateY(-2px);filter:saturate(1.1)}
+    .result{min-height:50px;margin-top:12px;border:1px solid rgba(255,255,255,.18);border-radius:17px;background:rgba(255,255,255,.075);padding:12px;color:#eaffff}.result.empty{color:var(--muted)}.result .value{direction:ltr;text-align:left;display:block;font-size:22px;font-weight:900;color:var(--green);overflow-wrap:anywhere}.result .name{color:#fff;font-weight:800}.result.error{border-color:rgba(255,109,141,.55);background:rgba(255,109,141,.10);color:#ffd8e1}.result.error .value{color:#ff9ab0}.result.multi{display:grid;gap:8px}.desc{margin:11px 0 0;color:var(--muted);font-size:13px;text-align:justify}.note{border:1px solid rgba(255,209,102,.3);background:rgba(255,209,102,.08);color:#ffe5a9;border-radius:18px;padding:12px 14px;margin-top:14px;font-size:13px}
+    .footer{margin-top:22px;text-align:center;color:var(--muted);font-size:13px}.footer code{direction:ltr;display:inline-block;border:1px solid var(--line);border-radius:8px;padding:1px 7px;background:rgba(0,0,0,.16)}
+    @media(max-width:900px){main{padding:14px}.hero{grid-template-columns:1fr}header{padding:20px}.orb-card{min-height:170px}.orb{width:110px;height:110px}.tabs{grid-template-columns:1fr}.tabs-wrap{position:relative}.cards{grid-template-columns:1fr}.inputs{grid-template-columns:1fr}.solver-head{flex-direction:column}.unit-tag{white-space:normal}}
+  </style>
+</head>
+<body>
+<div class="waves"></div>
+<main>
+  <header class="glass">
+    <div class="hero">
+      <div>
+        <h1><span class="gradient-text">حل‌کننده شیشه‌ای فرمول‌های فیزیک</span></h1>
+        <p class="lead">یک صفحه تک‌فایل HTML با تم اقیانوسی، کارت‌های Glassmorphism، تب‌های پایه دهم، یازدهم و دوازدهم، نمایش فرمول‌ها با KaTeX و محاسبه دقیق با JavaScript.</p>
+        <div class="badges">
+          <span class="badge">Vazirmatn + KaTeX</span>
+          <span class="badge">آبی، سبز، صورتی پاستلی</span>
+          <span class="badge">اعتبارسنجی فارسی</span>
+          <span class="badge">کاملاً ریسپانسیو</span>
+          <span class="badge">تک‌صفحه‌ای</span>
+        </div>
+      </div>
+      <div class="orb-card">
+        <div class="orb"></div>
+        <p>اعداد را وارد کن، روی «محاسبه ⚡» بزن و نتیجه را با واحد SI ببین.</p>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs-wrap" aria-label="تب پایه‌ها">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="grade10">پایه دهم</button>
+      <button class="tab-btn" data-tab="grade11">پایه یازدهم</button>
+      <button class="tab-btn" data-tab="grade12">پایه دوازدهم</button>
+    </div>
+  </nav>
+
+  <section id="grade10" class="tab-panel active"></section>
+  <section id="grade11" class="tab-panel"></section>
+  <section id="grade12" class="tab-panel"></section>
+
+  <p class="footer">نکته: اگر اینترنت/CDN در مرورگر فعال نباشد، KaTeX ممکن است به صورت متن TeX نمایش داده شود. محاسبات همچنان در همین فایل انجام می‌شوند.</p>
+</main>
+
+<script>
+'use strict';
+
+/* =====================================================
+   ابزارهای عمومی: قالب‌بندی، اعتبارسنجی، رندر KaTeX
+===================================================== */
+const $ = (sel, root=document) => root.querySelector(sel);
+const $$ = (sel, root=document) => [...root.querySelectorAll(sel)];
+
+function fmt(x, unit=''){
+  if(!Number.isFinite(x)) return 'نامعتبر';
+  const ax = Math.abs(x);
+  let s;
+  if((ax !== 0 && ax < 1e-4) || ax >= 1e7) s = x.toExponential(6);
+  else s = Number(x.toFixed(8)).toString();
+  return unit ? `${s} ${unit}` : s;
+}
+function degToRad(d){ return d * Math.PI / 180; }
+function radToDeg(r){ return r * 180 / Math.PI; }
+function isValidNumber(v){ return v !== '' && v !== null && Number.isFinite(Number(v)); }
+
+function readInputs(card, def){
+  const values = {};
+  for(const input of def.inputs){
+    const el = card.querySelector(`[data-var="${input.key}"]`);
+    const raw = el.value.trim();
+    if(!isValidNumber(raw)) throw new Error(`لطفاً مقدار «${input.label}» را به صورت عدد معتبر وارد کنید.`);
+    const n = Number(raw);
+    if(input.positive && !(n > 0)) throw new Error(`مقدار «${input.label}» باید بزرگ‌تر از صفر باشد.`);
+    if(input.nonNegative && !(n >= 0)) throw new Error(`مقدار «${input.label}» نمی‌تواند منفی باشد.`);
+    if(input.notZero && n === 0) throw new Error(`مقدار «${input.label}» نباید صفر باشد.`);
+    if(input.min !== undefined && n < input.min) throw new Error(`مقدار «${input.label}» باید حداقل ${input.min} باشد.`);
+    if(input.max !== undefined && n > input.max) throw new Error(`مقدار «${input.label}» باید حداکثر ${input.max} باشد.`);
+    values[input.key] = n;
+  }
+  return values;
+}
+
+function renderResult(card, outputs){
+  const box = $('.result', card);
+  box.className = 'result multi';
+  if(!Array.isArray(outputs)) outputs = [outputs];
+  box.innerHTML = outputs.map(o => `<div><span class="name">${o.label}</span><span class="value">${fmt(o.value, o.unit || '')}</span></div>`).join('');
+}
+function renderError(card, msg){
+  const box = $('.result', card);
+  box.className = 'result error';
+  box.innerHTML = `<span class="name">خطا:</span><span class="value">${msg}</span>`;
+}
+function renderKatexLater(){
+  setTimeout(() => {
+    $$('.formula-box').forEach(box => {
+      const tex = box.dataset.tex;
+      if(window.katex){
+        try{ katex.render(tex, box, {throwOnError:false, displayMode:true}); }
+        catch(e){ box.innerHTML = `<span class="formula-fallback">${tex}</span>`; }
+      } else {
+        box.innerHTML = `<span class="formula-fallback">${tex}</span>`;
+      }
+    });
+  }, 120);
+}
+
+/* =====================================================
+   داده فرمول‌ها و توابع محاسبه
+===================================================== */
+const grades = {
+  grade10: {
+    title:'پایه دهم',
+    subtitle:'اندازه‌گیری و چگالی، حرکت‌شناسی، دینامیک، فشار و شناوری، کار و انرژی',
+    chapters:[
+      {title:'اندازه‌گیری و چگالی', formulas:[
+        {title:'چگالی', tex:'\\rho = \\frac{m}{V}', badge:'kg/m³', desc:'چگالی برابر جرم تقسیم بر حجم است. در SI جرم با kg و حجم با m³ وارد می‌شود.', inputs:[
+          {key:'m',label:'جرم',unit:'kg',placeholder:'مثلاً 12',positive:true},
+          {key:'V',label:'حجم',unit:'m³',placeholder:'مثلاً 0.004',positive:true}
+        ], calc:v=>[{label:'چگالی ρ', value:v.m/v.V, unit:'kg/m³'}]}
+      ]},
+      {title:'حرکت‌شناسی', formulas:[
+        {title:'سرعت متوسط', tex:'v_{avg}=\\frac{\\Delta x}{\\Delta t}', badge:'m/s', desc:'سرعت متوسط برابر جابه‌جایی تقسیم بر بازه زمانی است.', inputs:[
+          {key:'dx',label:'جابه‌جایی Δx',unit:'m',placeholder:'مثلاً 50'},
+          {key:'dt',label:'زمان Δt',unit:'s',placeholder:'مثلاً 10',positive:true}
+        ], calc:v=>[{label:'سرعت متوسط', value:v.dx/v.dt, unit:'m/s'}]},
+        {title:'شتاب متوسط', tex:'a_{avg}=\\frac{\\Delta v}{\\Delta t}', badge:'m/s²', desc:'شتاب متوسط برابر تغییر سرعت در واحد زمان است.', inputs:[
+          {key:'dv',label:'تغییر سرعت Δv',unit:'m/s',placeholder:'مثلاً 18'},
+          {key:'dt',label:'زمان Δt',unit:'s',placeholder:'مثلاً 6',positive:true}
+        ], calc:v=>[{label:'شتاب متوسط', value:v.dv/v.dt, unit:'m/s²'}]}
+      ]},
+      {title:'دینامیک', formulas:[
+        {title:'قانون دوم نیوتن', tex:'F=ma', badge:'N', desc:'برآیند نیرو برابر جرم ضربدر شتاب جسم است.', inputs:[
+          {key:'m',label:'جرم',unit:'kg',placeholder:'مثلاً 5',positive:true},
+          {key:'a',label:'شتاب',unit:'m/s²',placeholder:'مثلاً 2'}
+        ], calc:v=>[{label:'نیرو F', value:v.m*v.a, unit:'N'}]},
+        {title:'نیروی وزن', tex:'W=mg', badge:'N', desc:'وزن نیروی گرانشی وارد بر جسم است. روی زمین معمولاً g≈9.8 m/s² است.', inputs:[
+          {key:'m',label:'جرم',unit:'kg',placeholder:'مثلاً 70',positive:true},
+          {key:'g',label:'شتاب گرانش g',unit:'m/s²',placeholder:'9.8',positive:true}
+        ], calc:v=>[{label:'وزن W', value:v.m*v.g, unit:'N'}]},
+        {title:'اصطکاک جنبشی', tex:'f_k=\\mu_k N', badge:'N', desc:'نیروی اصطکاک جنبشی حاصل‌ضرب ضریب اصطکاک جنبشی در نیروی عمودی سطح است.', inputs:[
+          {key:'mu',label:'ضریب اصطکاک μₖ',unit:'بدون یکا',placeholder:'مثلاً 0.25',nonNegative:true},
+          {key:'N',label:'نیروی عمودی N',unit:'N',placeholder:'مثلاً 120',nonNegative:true}
+        ], calc:v=>[{label:'اصطکاک جنبشی fₖ', value:v.mu*v.N, unit:'N'}]},
+        {title:'قانون هوک', tex:'F=kx', badge:'N', desc:'در محدوده کشسانی، نیروی فنر با جابه‌جایی متناسب است.', inputs:[
+          {key:'k',label:'ثابت فنر k',unit:'N/m',placeholder:'مثلاً 200',positive:true},
+          {key:'x',label:'کشیدگی/فشردگی x',unit:'m',placeholder:'مثلاً 0.03'}
+        ], calc:v=>[{label:'نیروی فنر F', value:v.k*v.x, unit:'N'}]}
+      ]},
+      {title:'فشار و شناوری', formulas:[
+        {title:'فشار', tex:'P=\\frac{F}{A}', badge:'Pa', desc:'فشار برابر نیروی عمود بر سطح تقسیم بر مساحت سطح است.', inputs:[
+          {key:'F',label:'نیرو F',unit:'N',placeholder:'مثلاً 500'},
+          {key:'A',label:'مساحت A',unit:'m²',placeholder:'مثلاً 0.2',positive:true}
+        ], calc:v=>[{label:'فشار P', value:v.F/v.A, unit:'Pa'}]},
+        {title:'فشار در مایعات', tex:'P=\\rho gh', badge:'Pa', desc:'فشار هیدروستاتیکی با چگالی مایع، شتاب گرانش و عمق متناسب است.', inputs:[
+          {key:'rho',label:'چگالی ρ',unit:'kg/m³',placeholder:'مثلاً 1000',positive:true},
+          {key:'h',label:'عمق h',unit:'m',placeholder:'مثلاً 3',nonNegative:true},
+          {key:'g',label:'شتاب گرانش g',unit:'m/s²',placeholder:'9.8',positive:true}
+        ], calc:v=>[{label:'فشار مایع P', value:v.rho*v.g*v.h, unit:'Pa'}]}
+      ]},
+      {title:'کار و انرژی', formulas:[
+        {title:'توان', tex:'P=\\frac{W}{t}', badge:'W', desc:'توان برابر کار یا انرژی منتقل‌شده در واحد زمان است.', inputs:[
+          {key:'W',label:'کار W',unit:'J',placeholder:'مثلاً 600'},
+          {key:'t',label:'زمان t',unit:'s',placeholder:'مثلاً 20',positive:true}
+        ], calc:v=>[{label:'توان P', value:v.W/v.t, unit:'W'}]},
+        {title:'بازده', tex:'\\eta=\\frac{W_{out}}{W_{in}}\\times 100', badge:'%', desc:'بازده نشان می‌دهد چند درصد انرژی/کار ورودی به خروجی مفید تبدیل شده است.', inputs:[
+          {key:'Wout',label:'کار خروجی Wout',unit:'J',placeholder:'مثلاً 350',nonNegative:true},
+          {key:'Win',label:'کار ورودی Win',unit:'J',placeholder:'مثلاً 500',positive:true}
+        ], calc:v=>{
+          const eta = (v.Wout/v.Win)*100;
+          if(eta > 100) throw new Error('بازده بیشتر از ۱۰۰٪ شده است؛ لطفاً Wout و Win را بررسی کنید.');
+          return [{label:'بازده η', value:eta, unit:'%'}];
+        }}
+      ]}
+    ]
+  },
+  grade11: {
+    title:'پایه یازدهم',
+    subtitle:'الکتریسیته ساکن، الکتریسیته جاری، مغناطیس و القا',
+    chapters:[
+      {title:'الکتریسیته ساکن', formulas:[
+        {title:'قانون کولن', tex:'F=k\\frac{q_1q_2}{r^2}', badge:'N', desc:'نیروی الکتریکی بین دو بار نقطه‌ای با حاصل‌ضرب بارها متناسب و با مربع فاصله وارون است. k≈8.99×10⁹.', inputs:[
+          {key:'q1',label:'بار q₁',unit:'C',placeholder:'مثلاً 2e-6'},
+          {key:'q2',label:'بار q₂',unit:'C',placeholder:'مثلاً 3e-6'},
+          {key:'r',label:'فاصله r',unit:'m',placeholder:'مثلاً 0.2',positive:true}
+        ], calc:v=>[{label:'نیروی کولن F', value:8.9875517923e9*v.q1*v.q2/(v.r*v.r), unit:'N'}]},
+        {title:'میدان الکتریکی', tex:'E=\\frac{F}{q}', badge:'N/C', desc:'میدان الکتریکی برابر نیرو بر واحد بار آزمون است.', inputs:[
+          {key:'F',label:'نیرو F',unit:'N',placeholder:'مثلاً 0.4'},
+          {key:'q',label:'بار q',unit:'C',placeholder:'مثلاً 2e-6',notZero:true}
+        ], calc:v=>[{label:'میدان الکتریکی E', value:v.F/v.q, unit:'N/C'}]},
+        {title:'پتانسیل الکتریکی', tex:'V=\\frac{U}{q}', badge:'V', desc:'پتانسیل برابر انرژی پتانسیل الکتریکی بر واحد بار است.', inputs:[
+          {key:'U',label:'انرژی U',unit:'J',placeholder:'مثلاً 0.02'},
+          {key:'q',label:'بار q',unit:'C',placeholder:'مثلاً 1e-6',notZero:true}
+        ], calc:v=>[{label:'پتانسیل V', value:v.U/v.q, unit:'V'}]},
+        {title:'رابطه میدان و پتانسیل', tex:'V=Ed', badge:'V', desc:'در میدان یکنواخت، اختلاف پتانسیل برابر میدان ضربدر فاصله است.', inputs:[
+          {key:'E',label:'میدان E',unit:'V/m',placeholder:'مثلاً 300'},
+          {key:'d',label:'فاصله d',unit:'m',placeholder:'مثلاً 0.05',nonNegative:true}
+        ], calc:v=>[{label:'اختلاف پتانسیل V', value:v.E*v.d, unit:'V'}]},
+        {title:'ظرفیت خازن', tex:'C=\\frac{q}{V}', badge:'F', desc:'ظرفیت خازن مقدار بار ذخیره‌شده به ازای هر ولت اختلاف پتانسیل است.', inputs:[
+          {key:'q',label:'بار q',unit:'C',placeholder:'مثلاً 2e-6'},
+          {key:'V',label:'اختلاف پتانسیل V',unit:'V',placeholder:'مثلاً 12',notZero:true}
+        ], calc:v=>[{label:'ظرفیت C', value:v.q/v.V, unit:'F'}]},
+        {title:'انرژی خازن', tex:'U=\\frac{1}{2}CV^2', badge:'J', desc:'انرژی ذخیره‌شده در خازن به ظرفیت و مربع ولتاژ وابسته است.', inputs:[
+          {key:'C',label:'ظرفیت C',unit:'F',placeholder:'مثلاً 1e-6',nonNegative:true},
+          {key:'V',label:'ولتاژ V',unit:'V',placeholder:'مثلاً 10'}
+        ], calc:v=>[{label:'انرژی خازن U', value:0.5*v.C*v.V*v.V, unit:'J'}]}
+      ]},
+      {title:'الکتریسیته جاری', formulas:[
+        {title:'جریان الکتریکی', tex:'I=\\frac{q}{t}', badge:'A', desc:'جریان برابر بار عبوری از مقطع رسانا در واحد زمان است.', inputs:[
+          {key:'q',label:'بار q',unit:'C',placeholder:'مثلاً 30'},
+          {key:'t',label:'زمان t',unit:'s',placeholder:'مثلاً 10',positive:true}
+        ], calc:v=>[{label:'جریان I', value:v.q/v.t, unit:'A'}]},
+        {title:'مقاومت رسانا', tex:'R=\\rho\\frac{L}{A}', badge:'Ω', desc:'مقاومت رسانا به مقاومت ویژه، طول و سطح مقطع وابسته است.', inputs:[
+          {key:'rho',label:'مقاومت ویژه ρ',unit:'Ω·m',placeholder:'مثلاً 1.7e-8',positive:true},
+          {key:'L',label:'طول L',unit:'m',placeholder:'مثلاً 2',positive:true},
+          {key:'A',label:'سطح مقطع A',unit:'m²',placeholder:'مثلاً 1e-6',positive:true}
+        ], calc:v=>[{label:'مقاومت R', value:v.rho*v.L/v.A, unit:'Ω'}]},
+        {title:'قانون اهم', tex:'V=RI', badge:'V', desc:'اختلاف پتانسیل دو سر مقاومت برابر مقاومت ضربدر جریان است.', inputs:[
+          {key:'R',label:'مقاومت R',unit:'Ω',placeholder:'مثلاً 20',nonNegative:true},
+          {key:'I',label:'جریان I',unit:'A',placeholder:'مثلاً 0.5'}
+        ], calc:v=>[{label:'ولتاژ V', value:v.R*v.I, unit:'V'}]},
+        {title:'توان الکتریکی', tex:'P=VI', badge:'W', desc:'توان مصرفی/تولیدی الکتریکی برابر حاصل‌ضرب ولتاژ در جریان است.', inputs:[
+          {key:'V',label:'ولتاژ V',unit:'V',placeholder:'مثلاً 220'},
+          {key:'I',label:'جریان I',unit:'A',placeholder:'مثلاً 2'}
+        ], calc:v=>[{label:'توان P', value:v.V*v.I, unit:'W'}]}
+      ]},
+      {title:'مغناطیس و القا', formulas:[
+        {title:'نیروی لورنتس', tex:'F=qvB\\sin\\theta', badge:'N', desc:'نیروی وارد بر بار متحرک در میدان مغناطیسی به زاویه حرکت نسبت به میدان وابسته است. زاویه را بر حسب درجه وارد کنید.', inputs:[
+          {key:'q',label:'بار q',unit:'C',placeholder:'مثلاً 1.6e-19'},
+          {key:'v',label:'سرعت v',unit:'m/s',placeholder:'مثلاً 2e6',nonNegative:true},
+          {key:'B',label:'میدان B',unit:'T',placeholder:'مثلاً 0.5'},
+          {key:'theta',label:'زاویه θ',unit:'degree',placeholder:'مثلاً 90',min:0,max:180}
+        ], calc:v=>[{label:'نیروی لورنتس F', value:v.q*v.v*v.B*Math.sin(degToRad(v.theta)), unit:'N'}]},
+        {title:'شار مغناطیسی', tex:'\\Phi=BA\\cos\\theta', badge:'Wb', desc:'شار مغناطیسی برابر حاصل‌ضرب میدان، مساحت و کسینوس زاویه بین میدان و بردار سطح است.', inputs:[
+          {key:'B',label:'میدان B',unit:'T',placeholder:'مثلاً 0.2'},
+          {key:'A',label:'مساحت A',unit:'m²',placeholder:'مثلاً 0.03',nonNegative:true},
+          {key:'theta',label:'زاویه θ',unit:'degree',placeholder:'مثلاً 30',min:0,max:180}
+        ], calc:v=>[{label:'شار Φ', value:v.B*v.A*Math.cos(degToRad(v.theta)), unit:'Wb'}]}
+      ]}
+    ]
+  },
+  grade12: {
+    title:'پایه دوازدهم',
+    subtitle:'حرکت بر خط راست، موج و صوت، فیزیک اتمی و هسته‌ای',
+    chapters:[
+      {title:'حرکت بر خط راست', formulas:[
+        {title:'حرکت‌شناسی ۵ متغیره', tex:'v=v_0+at\\quad,\\quad x=x_0+v_0t+\\frac{1}{2}at^2', badge:'m, m/s', desc:'با وارد کردن x₀، v₀، a و t، سرعت نهایی و مکان نهایی محاسبه می‌شود. این کارت ساختار ۵ متغیر اصلی حرکت خطی را نشان می‌دهد: x، x₀، v₀، a، t.', inputs:[
+          {key:'x0',label:'مکان اولیه x₀',unit:'m',placeholder:'مثلاً 0'},
+          {key:'v0',label:'سرعت اولیه v₀',unit:'m/s',placeholder:'مثلاً 5'},
+          {key:'a',label:'شتاب a',unit:'m/s²',placeholder:'مثلاً 2'},
+          {key:'t',label:'زمان t',unit:'s',placeholder:'مثلاً 4',nonNegative:true}
+        ], calc:v=>[{label:'سرعت نهایی v', value:v.v0+v.a*v.t, unit:'m/s'}, {label:'مکان نهایی x', value:v.x0+v.v0*v.t+0.5*v.a*v.t*v.t, unit:'m'}]}
+      ]},
+      {title:'موج و صوت', formulas:[
+        {title:'معادله موج', tex:'v=\\lambda f', badge:'m/s', desc:'سرعت موج برابر طول موج ضربدر بسامد است.', inputs:[
+          {key:'lambda',label:'طول موج λ',unit:'m',placeholder:'مثلاً 0.75',positive:true},
+          {key:'f',label:'بسامد f',unit:'Hz',placeholder:'مثلاً 440',nonNegative:true}
+        ], calc:v=>[{label:'سرعت موج v', value:v.lambda*v.f, unit:'m/s'}]},
+        {title:'قانون اسنل', tex:'n_1\\sin\\theta_1=n_2\\sin\\theta_2', badge:'degree', desc:'زاویه شکست از قانون اسنل به دست می‌آید. زاویه‌ها بر حسب درجه هستند.', inputs:[
+          {key:'n1',label:'ضریب شکست n₁',unit:'بدون یکا',placeholder:'مثلاً 1',positive:true},
+          {key:'theta1',label:'زاویه تابش θ₁',unit:'degree',placeholder:'مثلاً 30',min:0,max:90},
+          {key:'n2',label:'ضریب شکست n₂',unit:'بدون یکا',placeholder:'مثلاً 1.5',positive:true}
+        ], calc:v=>{
+          const s = v.n1*Math.sin(degToRad(v.theta1))/v.n2;
+          if(Math.abs(s)>1) throw new Error('شکست معمولی ممکن نیست؛ مقدار sinθ₂ بزرگ‌تر از ۱ شده است. احتمال بازتاب کلی را بررسی کنید.');
+          return [{label:'زاویه شکست θ₂', value:radToDeg(Math.asin(s)), unit:'degree'}];
+        }},
+        {title:'عدسی/آینه', tex:'\\frac{1}{f}=\\frac{1}{d_o}+\\frac{1}{d_i}\\quad,\\quad M=-\\frac{d_i}{d_o}', badge:'m', desc:'با داشتن فاصله کانونی و فاصله جسم، فاصله تصویر و بزرگنمایی محاسبه می‌شود.', inputs:[
+          {key:'f',label:'فاصله کانونی f',unit:'m',placeholder:'مثلاً 0.2',notZero:true},
+          {key:'do',label:'فاصله جسم dₒ',unit:'m',placeholder:'مثلاً 0.6',notZero:true}
+        ], calc:v=>{
+          const denom = (1/v.f)-(1/v.do);
+          if(Math.abs(denom)<1e-15) throw new Error('تصویر در بی‌نهایت تشکیل می‌شود؛ dₒ تقریباً برابر f است.');
+          const di = 1/denom;
+          return [{label:'فاصله تصویر dᵢ', value:di, unit:'m'}, {label:'بزرگنمایی M', value:-di/v.do, unit:''}];
+        }}
+      ]},
+      {title:'فیزیک اتمی و هسته‌ای', formulas:[
+        {title:'اثر فوتوالکتریک', tex:'K_{max}=hf-W_0', badge:'J', desc:'بیشینه انرژی جنبشی فوتوالکترون برابر انرژی فوتون منهای تابع کار است.', inputs:[
+          {key:'h',label:'ثابت پلانک h',unit:'J·s',placeholder:'6.626e-34',positive:true},
+          {key:'f',label:'بسامد f',unit:'Hz',placeholder:'مثلاً 8e14',nonNegative:true},
+          {key:'W0',label:'تابع کار W₀',unit:'J',placeholder:'مثلاً 3e-19',nonNegative:true}
+        ], calc:v=>[{label:'Kmax', value:v.h*v.f-v.W0, unit:'J'}]},
+        {title:'طول موج دوبروی', tex:'\\lambda=\\frac{h}{p}', badge:'m', desc:'طول موج دوبروی برابر ثابت پلانک تقسیم بر تکانه ذره است.', inputs:[
+          {key:'h',label:'ثابت پلانک h',unit:'J·s',placeholder:'6.626e-34',positive:true},
+          {key:'p',label:'تکانه p',unit:'kg·m/s',placeholder:'مثلاً 1e-24',positive:true}
+        ], calc:v=>[{label:'طول موج λ', value:v.h/v.p, unit:'m'}]},
+        {title:'هم‌ارزی جرم-انرژی', tex:'E=mc^2', badge:'J', desc:'انرژی معادل جرم با مربع سرعت نور متناسب است. c≈3×10⁸ m/s.', inputs:[
+          {key:'m',label:'جرم m',unit:'kg',placeholder:'مثلاً 0.001',nonNegative:true}
+        ], calc:v=>[{label:'انرژی E', value:v.m*Math.pow(299792458,2), unit:'J'}]},
+        {title:'واپاشی هسته‌ای', tex:'N=N_0\\left(\\frac{1}{2}\\right)^{t/T}', badge:'تعداد/مول', desc:'پس از گذشت زمان t، مقدار ماده پرتوزا بر اساس نیمه‌عمر T کاهش می‌یابد.', inputs:[
+          {key:'N0',label:'مقدار اولیه N₀',unit:'عدد/مول',placeholder:'مثلاً 1000',nonNegative:true},
+          {key:'t',label:'زمان t',unit:'s',placeholder:'مثلاً 30',nonNegative:true},
+          {key:'T',label:'نیمه‌عمر T',unit:'s',placeholder:'مثلاً 10',positive:true}
+        ], calc:v=>[{label:'مقدار باقی‌مانده N', value:v.N0*Math.pow(0.5, v.t/v.T), unit:''}]}
+      ]}
+    ]
+  }
+};
+
+/* =====================================================
+   ساخت HTML کارت‌ها و تب‌ها
+===================================================== */
+function inputHTML(input){
+  return `<div class="input-field">
+    <label><span>${input.label}</span><small>${input.unit}</small></label>
+    <input data-var="${input.key}" type="number" step="any" inputmode="decimal" placeholder="${input.placeholder || ''}" aria-label="${input.label}">
+  </div>`;
+}
+function cardHTML(def, id){
+  return `<article class="solver-card" data-id="${id}">
+    <div class="solver-head">
+      <h4>${def.title}</h4>
+      <span class="unit-tag">خروجی: ${def.badge || 'SI'}</span>
+    </div>
+    <div class="formula-box" data-tex="${def.tex.replaceAll('"','&quot;')}"></div>
+    <div class="inputs">${def.inputs.map(inputHTML).join('')}</div>
+    <button class="calc-btn" type="button">محاسبه ⚡</button>
+    <div class="result empty">نتیجه اینجا نمایش داده می‌شود.</div>
+    <p class="desc">${def.desc}</p>
+  </article>`;
+}
+function renderGrade(gradeId, grade){
+  const root = document.getElementById(gradeId);
+  let counter = 0;
+  root.innerHTML = `<div class="grade-head glass"><h2>${grade.title}</h2><p>${grade.subtitle}</p></div>` + grade.chapters.map(ch => {
+    const cards = ch.formulas.map(f => cardHTML(f, `${gradeId}-${counter++}`)).join('');
+    return `<section class="chapter"><div class="chapter-title"><span class="dot"></span><h3>${ch.title}</h3></div><div class="cards">${cards}</div></section>`;
+  }).join('') + `<div class="note">تمام ورودی‌ها با واحد SI در نظر گرفته شده‌اند. برای اعداد علمی می‌توانی از قالب‌هایی مثل <b dir="ltr">6.626e-34</b> استفاده کنی.</div>`;
+}
+function allFormulaDefs(){
+  const map = new Map();
+  for(const [gid, grade] of Object.entries(grades)){
+    let counter = 0;
+    for(const ch of grade.chapters){
+      for(const f of ch.formulas){ map.set(`${gid}-${counter++}`, f); }
+    }
+  }
+  return map;
+}
+
+renderGrade('grade10', grades.grade10);
+renderGrade('grade11', grades.grade11);
+renderGrade('grade12', grades.grade12);
+const formulaMap = allFormulaDefs();
+renderKatexLater();
+
+/* =====================================================
+   رویدادها: تب‌ها و محاسبه کارت‌ها
+===================================================== */
+$$('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.tab-btn').forEach(b => b.classList.remove('active'));
+    $$('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+$$('.solver-card').forEach(card => {
+  const id = card.dataset.id;
+  const def = formulaMap.get(id);
+  $('.calc-btn', card).addEventListener('click', () => {
+    try{
+      const values = readInputs(card, def);
+      const outputs = def.calc(values);
+      renderResult(card, outputs);
+    } catch(err){
+      renderError(card, err.message || 'ورودی‌ها را بررسی کنید.');
+    }
+  });
+  // Enter داخل هر ورودی همان کارت را محاسبه کند.
+  $$('input', card).forEach(inp => inp.addEventListener('keydown', e => {
+    if(e.key === 'Enter') $('.calc-btn', card).click();
+  }));
+});
+</script>
+</body>
+</html>
